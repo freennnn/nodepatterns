@@ -1,3 +1,4 @@
+// Example of combining callback and Observer pattern: Events/EventEmitter API style for async task
 import { EventEmitter } from 'events';
 function ticker(number, callback) {
   const eventEmitter = new EventEmitter();
@@ -7,10 +8,12 @@ function ticker(number, callback) {
   function tick() {
     timeElapsed += 50;
     if (timeElapsed < number) {
-      eventEmitter.emit('tick', ++ticksEmitted);
+      // could be wrapped into process.nextTick() if we didn't control all the call sites - to make sure events
+      // always emitted asynchronously:
+      eventEmitter.emit('tick', ++ticksEmitted); 
       setTimeout(tick, 50);
     } else {
-      callback(null, ticksEmitted);
+      callback(null, ticksEmitted); // Node.js error first callback signature pattern
     }
   }
   setTimeout(tick, 50);
