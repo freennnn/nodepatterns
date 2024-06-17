@@ -1,5 +1,5 @@
 import path from 'path'
-import { URL } from 'url'
+import { URL, fileURLToPath } from 'url'
 import slug from 'slug'
 
 export function urlToFilename(url) {
@@ -9,10 +9,14 @@ export function urlToFilename(url) {
     .filter((el) => el !== '')
     .map((el) => slug(el, {remove: null}))
     .join('/')
-  let filename = path.join(parsedUrl.hostname.replace('.', '_'), urlPath)
+  let filename = path.join(parsedUrl.hostname.replace('.', '-'), urlPath)
   if (!path.extname(filename).match(/htm/)) {
     filename += '.html'
   }
-  return filename
   console.log(filename);
+  return filename
+}
+
+export function currentDirPath() {
+  return path.dirname(fileURLToPath(import.meta.url));
 }

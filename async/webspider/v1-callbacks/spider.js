@@ -3,11 +3,11 @@ import path from 'path'
 import superagent from 'superagent'
 import  mkdirp from 'mkdirp'
 import { fileURLToPath } from 'url';
-import { urlToFilename } from "./utils.js";
+import { urlToFilename, currentDirPath } from "./utils.js";
 
 export function spider(url, cb) {
   let filename = urlToFilename(url);
-  const __dirname = path.join(path.dirname(fileURLToPath(import.meta.url)), "downloads");
+  const __dirname = path.join(currentDirPath(), "downloads");
   filename = path.join(__dirname, filename);
   console.log(filename);
   fs.access(filename, err => {
