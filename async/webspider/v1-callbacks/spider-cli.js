@@ -1,5 +1,5 @@
-import { spider } from './spider.js'
-spider(process.argv[2], (err, filename, downloadedSuccessfully) => {
+import { spiderv1 } from './spider.js'
+spiderv1(process.argv[2], (err, filename, downloadedSuccessfully) => {
   if (err) {
     console.error(err)
   } else if (downloadedSuccessfully) {
