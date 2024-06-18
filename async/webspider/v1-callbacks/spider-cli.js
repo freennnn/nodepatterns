@@ -1,10 +1,16 @@
 import { spiderv1 } from './spider.js'
-spiderv1(process.argv[2], (err, filename, downloadedSuccessfully) => {
+import { spiderv2 } from './spider.js'
+
+function spiderCallback(err, filePath, downloadedSuccessfully) {
   if (err) {
     console.error(err)
   } else if (downloadedSuccessfully) {
-    console.log(`Completed the download of ${filename}`)
+    console.log(`Completed the download of ${filePath}`)
   } else {
-    console.log(`${filename} was already donwloaded`)
+    console.log(`${filePath} was already donwloaded`)
   }
-})
+}
+
+//spiderv1(process.argv[2], spiderCallback);
+
+spiderv2(process.argv[2], spiderCallback);

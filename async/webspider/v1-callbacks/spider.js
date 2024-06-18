@@ -40,7 +40,42 @@ export function spiderv1(url, cb) {
   })
 }
 
-// callback based, with best practives - like early return + small/decoupled functions
+// callback based, with best practices - like early return + small/decoupled functions
 export function spiderv2(url, cb) {
+  let filename = urlToFilename(url);
+  let filePath = storagePathForFilename(filename);
+  fs.access(filePath, err => {
+    if (!err || err.code !== 'ENOENT') {
+      return cb(null, filePath, false);
+    }
+    download(url, filePath, err => {
+      if (err) {
+        return cb(err);
+      }
+      cb(null, filePath, true)
+    })
+  })
+} 
 
+function saveToFile(filePath, contents, cb) {
+  mkdirp(path.dirname(filePath), err => {
+    if (err) {
+      return cb(err);
+    }
+    fs.writeFile(filePath, contents, err => {
+      if (err) {
+        return cb(err);
+      }
+      cb(null, filePath, true)
+    })
+  })
+}
+
+function download(url, filePath, cb) {
+  superagent.get(url).end((err, res) => {
+    if (err) {
+      return cb(err)
+    }
+    saveToFile(filePath, res.text, cb);
+  });
 }
