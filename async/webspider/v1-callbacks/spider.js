@@ -5,7 +5,7 @@ import  mkdirp from 'mkdirp'
 import { urlToFilename, currentDirPath, storagePathForFilename } from "./utils.js";
 
 // callbacks based, pyramide of doom - callback hell
-export function spiderv1(url, cb) {
+export function spiderV1Base(url, cb) {
   let filename = urlToFilename(url);
   let filepath = storagePathForFilename(filename);
   console.log(filepath);
@@ -41,7 +41,7 @@ export function spiderv1(url, cb) {
 }
 
 // callback based, with best practices - like early return + small/decoupled functions
-export function spiderv2(url, cb) {
+export function spiderV2Refactored(url, cb) {
   let filename = urlToFilename(url);
   let filePath = storagePathForFilename(filename);
   fs.access(filePath, err => {
