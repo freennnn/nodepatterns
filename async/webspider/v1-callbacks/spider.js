@@ -57,20 +57,6 @@ export function spiderv2(url, cb) {
   })
 } 
 
-function saveToFile(filePath, contents, cb) {
-  mkdirp(path.dirname(filePath), err => {
-    if (err) {
-      return cb(err);
-    }
-    fs.writeFile(filePath, contents, err => {
-      if (err) {
-        return cb(err);
-      }
-      cb(null, filePath, true)
-    })
-  })
-}
-
 function download(url, filePath, cb) {
   superagent.get(url).end((err, res) => {
     if (err) {
@@ -79,3 +65,14 @@ function download(url, filePath, cb) {
     saveToFile(filePath, res.text, cb);
   });
 }
+
+function saveToFile(filePath, contents, cb) {
+  mkdirp(path.dirname(filePath), err => {
+    if (err) {
+      return cb(err);
+    }
+    fs.writeFile(filePath, contents, cb);
+  })
+}
+
+
