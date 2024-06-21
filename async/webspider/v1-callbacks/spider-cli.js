@@ -1,5 +1,5 @@
 import { spiderV1Base } from './spider.js'
-import { spiderV2Refactored } from './spider.js'
+import { spiderV1Refactored } from './spider.js'
 
 function spiderCallback(err, filePath, downloadedSuccessfully) {
   if (err) {
@@ -13,4 +13,4 @@ function spiderCallback(err, filePath, downloadedSuccessfully) {
 
 //spiderV1Base(process.argv[2], spiderCallback);
 
-spiderV2Refactored(process.argv[2], spiderCallback);
+spiderV1Refactored(process.argv[2], spiderCallback);

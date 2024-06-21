@@ -41,7 +41,7 @@ export function spiderV1Base(url, cb) {
 }
 
 // callback based, with best practices - like early return + small/decoupled functions
-export function spiderV2Refactored(url, cb) {
+export function spiderV1Refactored(url, cb) {
   let filename = urlToFilename(url);
   let filePath = storagePathForFilename(filename);
   fs.access(filePath, err => {
