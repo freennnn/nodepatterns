@@ -1,7 +1,8 @@
 import { spiderV1Base } from './spider.js'
 import { spiderV1Refactored } from './spider.js'
+import { spiderV2 } from './spider.js'
 
-function spiderCallback(err, filePath, downloadedSuccessfully) {
+function spiderV1Callback(err, filePath, downloadedSuccessfully) {
   if (err) {
     console.error(err)
   } else if (downloadedSuccessfully) {
@@ -11,6 +12,13 @@ function spiderCallback(err, filePath, downloadedSuccessfully) {
   }
 }
 
-//spiderV1Base(process.argv[2], spiderCallback);
-
-spiderV1Refactored(process.argv[2], spiderCallback);
+//spiderV1Base(process.argv[2], spiderV1Callback);
+//spiderV1Refactored(process.argv[2], spiderV1Callback);
+let nesting = Number.parseInt(process.argv[3], 10) || 1
+spiderV2(process.argv[2], nesting, err => {
+  if (err) {
+    console.error(err)
+    process.exit(1)
+  }
+  console.log('Download complete')
+})

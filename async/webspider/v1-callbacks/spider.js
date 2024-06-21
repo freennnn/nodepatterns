@@ -75,4 +75,47 @@ function saveToFile(filePath, contents, cb) {
   })
 }
 
+// recursive downloading all links in the initial page and so on
+// sequential execution of collection of async tasks (with nesting limit)
+export function spiderV2 (url, nesting, cb) {
+  const filename = urlToFilename(url)
+  const filePath = storagePathForFilename(filename)
+  fs.readFile(filePath, 'utf8', (err, fileContent) => {
+    if (err) {
+      if (err.code !== 'ENOENT') {
+        return cb(err)
+      }
+      // The file doesn't exist - download it first, then spiderLinks()
+      return download(url, filePath, (err, requestContent) => {
+        if (err) {
+          return cb(err)
+        }
+        spiderLinks(url, requestContent, nesting, cb)
+      })
+    }
+    // The file already exists, let's process the links
+    spiderLinks(url, fileContent, nesting, cb)
+  })
 
+  function spiderLinks(currentUrl, body, nesting, cb) {
+    if (nesting === 0) {
+      process.nextTick(cb)
+    }
+    const links = getPageLinks(currentUrl, body)
+    if (links.length === 0) {
+      return process.nextTick(cb)
+    }
+    function iterate(index) {
+      if (index === links.length) {
+        return cb();
+      }
+      spiderLinks(links[index], nesting -1, function (err) {
+        if (err) {
+          return cb(err)
+        }
+        iterate(index+1)
+      })
+      iterate(0)
+    }
+  }
+}
